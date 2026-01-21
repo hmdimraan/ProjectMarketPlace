@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Marketplace | Professional Dashboard</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --tata-blue: #005aab;
+            --tata-light-blue: #f1f6fb;
+            --sidebar-width: 300px;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --border-light: #e2e8f0;
+            --success-color: #27ae60;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        /* --- Header Section --- */
+        .navbar-custom {
+            background: white;
+            border-bottom: 4px solid var(--tata-blue);
+            padding: 0.5rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+
+        .header-tool {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 15px;
+            text-decoration: none;
+            color: #444;
+            font-size: 0.8rem;
+            line-height: 1.2;
+        }
+
+        .header-tool img { width: 30px; height: 30px; object-fit: contain; }
+        .header-tool small { color: #888; display: block; }
+
+        /* --- Layout Structure --- */
+        .main-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #f3f3f3;
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-profile-section {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            border: 2px solid white;
+        }
+
+        .contributor-badge {
+            background-color: var(--tata-blue);
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-top: 15px;
+            line-height: 1.3;
+        }
+
+        /* Search Bar Styling */
+        .sidebar-search {
+            padding: 10px 15px;
+        }
+
+        .sidebar-search .input-group {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 0;
+        }
+
+        .sidebar-search input {
+            border: none;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+        }
+
+        .sidebar-search input:focus { box-shadow: none; }
+
+        /* Navigation Menu */
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-link-custom {
+            padding: 12px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+
+        .nav-link-custom:hover { background-color: #e4e0e0; color: #000; }
+        .nav-link-custom i { width: 20px; font-size: 1rem; }
+
+        .nav-link-sub {
+            padding: 8px 20px 8px 40px;
+            font-size: 0.8rem;
+            color: #444;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #ececec;
+            background-color: #f9f9f9;
+        }
+
+        .nav-link-sub:hover { background-color: #eee; }
+        .nav-link-sub i { font-size: 0.7rem; color: #999; }
+
+        /* --- Main Content Area --- */
+        .content-area {
+            flex: 1;
+            padding: 25px;
+            background-color: white;
+        }
+
+        .banner-img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        /* Stats & Icon Grid */
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .stat-icon-box {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .stat-icon-box:hover { transform: translateY(-3px); }
+
+        .stat-icon-box img { width: 65px; margin-bottom: 8px; }
+        .stat-icon-box span { display: block; font-size: 0.85rem; color: #555; font-weight: 500; }
+
+        /* Dashboard Statistics Bars */
+        .stats-summary-container {
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            display: flex;
+            padding: 20px;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+
+        .summary-item { text-align: center; }
+        .summary-item i { font-size: 1.5rem; margin-bottom: 5px; display: block; }
+        .summary-count { font-size: 1.3rem; font-weight: 800; display: block; }
+        .summary-label { font-size: 0.7rem; font-weight: 700; color: #444; text-transform: uppercase; }
+
+        /* Project Cards */
+        .project-card {
+            border: 1px solid #d1d1d1;
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .card-status-strip { width: 10px; background-color: var(--success-color); }
+
+        .project-details { padding: 20px; flex: 1; }
+
+        .project-title {
+            font-weight: 700;
+            color: var(--tata-blue);
+            text-decoration: underline;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .meta-text { font-size: 0.85rem; margin-bottom: 4px; }
+        .meta-bold { font-weight: 700; color: var(--tata-blue); }
+
+        /* Stepper Component */
+        .stepper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 25px;
+            padding-top: 10px;
+        }
+
+        .step { text-align: center; flex: 1; position: relative; }
+        .step i { font-size: 1.4rem; color: var(--success-color); background: white; z-index: 2; position: relative; }
+        .step-label { display: block; font-size: 0.7rem; margin-top: 5px; font-weight: 500; }
+
+        .step-line {
+            flex: 1;
+            height: 4px;
+            background-color: var(--success-color);
+            margin: 0 -15px;
+            transform: translateY(-13px);
+            z-index: 1;
+        }
+
+        .step-line.inactive { background-color: #ddd; }
+        .step i.inactive { color: #ccc; }
+        .step i.active-spin { color: var(--tata-blue); }
+
+        @media (max-width: 992px) {
+            .sidebar { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar-custom d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <img src="https://i.ibb.co/pwYK0v1/pmp-logo-sl.png" alt="Logo" height="55">
+        </div>
+        
+        <div class="d-flex align-items-center gap-2">
+            <a href="#" class="header-tool text-primary fw-bold">
+                <i class="bi bi-person-plus-fill fs-5"></i>
+                <span>Invite Colleagues</span>
+            </a>
+            <div class="header-tool border-start border-end px-3">
+                <img src="https://i.ibb.co/wLTxhjm/film.png" alt="Learn">
+                <span>Project Marketplace Videos<br><small>Learn More, Learn Fast</small></span>
+            </div>
+            <div class="header-tool pe-4">
+                <img src="https://i.ibb.co/bJ60XqG/idk-2-0.png" alt="FAQ">
+                <span>Guides and<br><small>FAQ's</small></span>
+            </div>
+            <img src="https://i.ibb.co/dczdM94/tata3-0.png" alt="Tata" height="30">
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="user-profile-section">
+                <img src="https://i.ibb.co/r4qbdxr/person.png" class="user-avatar" alt="Profile">
+                <h6 class="mb-0 fw-bold">H.MD.Imraan</h6>
+                <p class="small text-muted mb-1">Consultant</p>
+                <a href="#" class="small text-primary text-decoration-underline">My Profile</a>
+                <p class="mt-2 mb-0" style="font-size: 0.7rem; color: #777;">Your Profile is Your Gateway to great Opportunities.</p>
+                
+                <div class="contributor-badge">
+                    PROJECT MANAGER - LEVEL 0 CONTRIBUTOR<br>
+                    <small>Complete Current Project To Level Up</small>
+                </div>
+            </div>
+
+            <div class="sidebar-search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for talent">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link-custom"><i class="bi bi-list"></i> MY DASHBOARD</a>
+                <a href="#" class="nav-link-custom"><i class="bi bi-mortarboard-fill"></i> SHAPE THE FUTURE</a>
+                <a href="#" class="nav-link-custom"><i class="bi bi-plus-lg"></i> POST NEW PROJECT</a>
+                <a href="#" class="nav-link-custom"><i class="bi bi-people-fill"></i> FIND TALENT@TCL</a>
+                <a href="#" class="nav-link-custom"><i class="bi bi-briefcase-fill"></i> FIND EXTERNAL FREELANCERS</a>
+                <a href="#" class="nav-link-custom"><i class="bi bi-trophy-fill"></i> MY REWARD STORE</a>
+                
+                <a href="#" class="nav-link-custom"><i class="bi bi-gear-fill"></i> ADMIN MENU</a>
+                <div class="admin-links">
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> EXTERNAL PROJECT APPROVAL</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> ADD SUPPORT DOCUMENTS</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> GAMIFICAATION ACTIONS</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> MANAGE PROJECTS</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> NOTIFICATION SWITCH</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> MANAGE FEATURED SKILLS</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> MANAGE FEATURED TESTIMONIALS</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> MANAGE ANNOUNCEMENT</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> PMP OVERALL STATUS</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> OVERALL REPORT</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> PROJECT CATEGORY COUNT</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> POWER USER LIST</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> TOP KEY WORK AREA</a>
+                </div>
+
+                <a href="#" class="nav-link-custom"><i class="bi bi-chat-dots-fill"></i> SUPPORT & FEEDBACK</a>
+                <div class="support-links">
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> REPORT AN ISSUE/PROJECT</a>
+                    <a href="#" class="nav-link-sub"><i class="bi bi-chevron-right"></i> SIGNUP FOR DESIGN THINKING STUDIES</a>
+                </div>
+
+                <a href="#" class="nav-link-custom border-bottom-0"><i class="bi bi-box-arrow-right"></i> LOGOUT</a>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <img src="https://i.ibb.co/hgJVjBH/pmp-into-2-0.png" class="banner-img" alt="Banner">
+
+            <div class="stats-row">
+                <div class="stat-icon-box">
+                    <img src="https://i.ibb.co/mFgmvCY/bell-icon.png" alt="Notify">
+                    <span>My Notifications</span>
+                </div>
+                <div class="stat-icon-box">
+                    <img src="https://i.ibb.co/tqTpHFB/idk-icon.png" alt="Stats">
+                    <span>My Statistics</span>
+                </div>
+                <div class="stat-icon-box">
+                    <img src="https://i.ibb.co/fFvWQ44/star-icon.png" alt="Score">
+                    <span>My Scorecard</span>
+                </div>
+                <div class="stat-icon-box">
+                    <img src="https://i.ibb.co/ggr2ST8/brain-icon.png" alt="Skill">
+                    <span>Skill Warehouse</span>
+                </div>
+            </div>
+
+            <h5 class="fw-bold mb-3" style="color: #1a016b;">My Project Statistics</h5>
+            <div class="stats-summary-container">
+                <div class="summary-item">
+                    <i class="bi bi-file-earmark-text text-warning"></i>
+                    <span class="summary-count">2</span>
+                    <span class="summary-label">Requisition</span>
+                </div>
+                <div class="summary-item">
+                    <i class="bi bi-play-circle-fill text-primary"></i>
+                    <span class="summary-count">13</span>
+                    <span class="summary-label">Active</span>
+                </div>
+                <div class="summary-item">
+                    <i class="bi bi-file-earmark-ruled text-secondary"></i>
+                    <span class="summary-count">1</span>
+                    <span class="summary-label">Draft</span>
+                </div>
+                <div class="summary-item">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                    <span class="summary-count">3</span>
+                    <span class="summary-label">Completed</span>
+                </div>
+                <div class="summary-item">
+                    <i class="bi bi-lock-fill text-muted"></i>
+                    <span class="summary-count">0</span>
+                    <span class="summary-label">Archived</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-status-strip"></div>
+                <div class="project-details">
+                    <div class="d-flex justify-content-between">
+                        <a href="#" class="project-title">Project Test To Complete</a>
+                        <i class="fa fa-external-link text-muted"></i>
+                    </div>
+                    <p class="meta-text"><span class="meta-bold">Sponsor/Owner:</span> H.MD.Imraan</p>
+                    <p class="meta-text"><span class="meta-bold">Manager:</span> H.MD.Imraan</p>
+                    <p class="meta-text"><span class="meta-bold">Project Business Unit:</span> Human Resource</p>
+
+                    <div class="stepper">
+                        <div class="step"><i class="fa fa-check-circle"></i><span class="step-label">Published</span></div>
+                        <div class="step-line"></div>
+                        <div class="step"><i class="fa fa-check-circle"></i><span class="step-label">Selection</span></div>
+                        <div class="step-line"></div>
+                        <div class="step"><i class="fa fa-check-circle"></i><span class="step-label">Active</span></div>
+                        <div class="step-line"></div>
+                        <div class="step"><i class="fa fa-check-circle"></i><span class="step-label">Feedback</span></div>
+                        <div class="step-line"></div>
+                        <div class="step"><i class="fa fa-check-circle"></i><span class="step-label">Completed</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-status-strip" style="background-color: #888;"></div>
+                <div class="project-details">
+                    <div class="d-flex justify-content-between">
+                        <a href="#" class="project-title">Pluto - Digital Transformation</a>
+                        <i class="fa fa-external-link text-muted"></i>
+                    </div>
+                    <p class="meta-text"><span class="meta-bold">Sponsor/Owner:</span> H.MD.Imraan</p>
+                    <p class="meta-text"><span class="meta-bold">Manager:</span> H.MD.Imraan</p>
+
+                    <div class="stepper">
+                        <div class="step"><i class="fa fa-check-circle"></i><span class="step-label">Published</span></div>
+                        <div class="step-line"></div>
+                        <div class="step"><i class="fa fa-circle-notch fa-spin active-spin"></i><span class="step-label">Selection</span></div>
+                        <div class="step-line inactive"></div>
+                        <div class="step"><i class="fa fa-circle inactive"></i><span class="step-label">Active</span></div>
+                        <div class="step-line inactive"></div>
+                        <div class="step"><i class="fa fa-circle inactive"></i><span class="step-label">Feedback</span></div>
+                        <div class="step-line inactive"></div>
+                        <div class="step"><i class="fa fa-circle inactive"></i><span class="step-label">Completed</span></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
